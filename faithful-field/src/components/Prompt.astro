@@ -1,0 +1,27 @@
+---
+import { ChatGPTAPI } from 'chatgpt'
+
+export async function generatePrompt(prompt: string): Promise<string> {
+  // sessionToken is required; see below for details
+//   console.log(`SESSION_TOKEN: ${JSON.stringify(import.meta.env)}`)
+  const api = new ChatGPTAPI({
+    sessionToken: import.meta.env.SESSION_TOKEN,
+    
+  })
+
+
+
+  // ensure the API is properly authenticated
+  await api.ensureAuth()
+
+// timeout after 2 minutes (which will also abort the underlying HTTP request)
+const response = await api.sendMessage(prompt, {
+  timeoutMs: 2 * 60 * 1000,
+})
+
+  // response is a markdown-formatted string
+  console.log(`response ---------------------------------------------------------- \n: ${response} \n ----------------------------------------------------------`)
+
+  return response
+}
+---
